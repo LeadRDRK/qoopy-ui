@@ -1,0 +1,89 @@
+<!-- TODO: add fancy meta tags -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/common.css" />
+    <title>Qoopy — QooApp APK downloader</title>
+    <meta name="description" content="Download games directly from QooApp. Get APK from QooApp without needing an account.">
+    <meta property="og:title" content="Qoopy">
+    <meta property="og:description" content="Download games directly from QooApp. Get APK from QooApp without needing an account.">
+    <meta property="og:url" content="https://qoopy.leadrdrk.com">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Qoopy">
+    <meta name="twitter:description" content="Download games directly from QooApp. Get APK from QooApp without needing an account.">
+  </head>
+  <body>
+    <div class="main-wrapper">
+      <div class="main">
+        <div></div>
+
+        <div class="main-box">
+          <img src="/assets/banner.svg" class="brand-banner" />
+          <div class="brand-caption">Download games directly from QooApp.</div>
+          <div class="form">
+            <div id="mainInputWrapper" class="input-wrapper">
+              <div class="input-border"></div>
+              <input id="mainInput" type="text" placeholder="App link or ID, e.g. https://apps.qoo-app.com/app/6172" />
+            </div>
+            <button id="submitButton" class="button material-symbols-outlined">
+              &#xe941;
+              <div id="loadingIcon">
+                &#xe9d0;
+              </div>
+            </button>
+          </div>
+
+          <div id="appDetailsBox">
+            <div class="app-details-outer">
+              <div class="app-details-inner">
+                <img id="appIcon" />
+                <div class="app-info">
+                  <div>
+                    <div id="appName"></div>
+                    <div id="appCompany"></div>
+                  </div>
+                  <div>
+                    <div><b>Version:</b> <span id="appVersion"></span></div>
+                    <div><b>Updated at:</b> <span id="appUpdatedAt"></span></div>
+                  </div>
+                </div>
+              </div>
+              <div id="downloadBox">
+                <a id="downloadButton" class="button" target="_blank">
+                  <span class="material-symbols-outlined">&#xf090;</span>
+                  Download (<span id="downloadSize">0.00MB</span>)
+                </a>
+                <div class="download-na">
+                  Not available for download.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div>v0.1.0</div>
+          <div>This app is not affiliated with or endorsed by QooApp Limited.</div>
+          <div class="footer-spacer"></div>
+          <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#29abe0', 'Q5Q3QEHRA');kofiwidget2.draw();</script> 
+        </div>
+      </div>
+    </div>
+
+    <div id="modalShadow"></div>
+
+    <div id="challengeModal" class="modal"></div>
+
+    <div id="errorDialog" class="modal">
+      <h2><span class="material-symbols-outlined">&#xe000;</span> Error</h2>
+      <div id="errorDialogBody"></div>
+      <button id="errorDialogOk" class="button">OK</button>
+    </div>
+
+    <script type="module" src="/src/index.ts"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=init" async defer></script>
+  </body>
+</html>
