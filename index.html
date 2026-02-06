@@ -21,7 +21,7 @@
 
         <div class="main-box">
           <img src="/assets/banner.svg" class="brand-banner" />
-          <div class="brand-caption">Download games directly from QooApp.</div>
+          <div class="brand-caption" data-i18n="brand_caption">Download games directly from QooApp.</div>
           <div class="form">
             <div id="mainInputWrapper" class="input-wrapper">
               <div class="input-border"></div>
@@ -45,15 +45,15 @@
                     <div id="appCompany"></div>
                   </div>
                   <div>
-                    <div><b>Version:</b> <span id="appVersion"></span></div>
-                    <div><b>Updated at:</b> <span id="appUpdatedAt"></span></div>
+                    <div><b data-i18n="version_label">Version:</b> <span id="appVersion"></span></div>
+                    <div><b data-i18n="updated_at_label">Updated at:</b> <span id="appUpdatedAt"></span></div>
                   </div>
                 </div>
               </div>
               <div id="downloadBox">
                 <a id="xapkButton" class="button">
                   <span class="material-symbols-outlined">&#xf090;</span>
-                  <span>XAPK</span>
+                  <span data-i18n="xapk">XAPK</span>
                 </a>
                 <a id="downloadButton" class="button" target="_blank">
                   <span class="material-symbols-outlined">&#xf090;</span>
@@ -61,9 +61,9 @@
                 </a>
                 <a id="splitsButton" class="button secondary">
                   <span class="material-symbols-outlined">&#xf090;</span>
-                  <span>Split APKs</span>
+                  <span data-i18n="split_apks">Split APKs</span>
                 </a>
-                <div class="download-na">
+                <div class="download-na" data-i18n="download_na">
                   Not available for download.
                 </div>
               </div>
@@ -73,8 +73,13 @@
 
         <div class="footer">
           <div>v0.2.1</div>
-          <div>This app is not affiliated with or endorsed by QooApp Limited.</div>
+          <div data-i18n="disclaimer">This app is not affiliated with or endorsed by QooApp Limited.</div>
           <div class="footer-spacer"></div>
+          <div style="margin-bottom: 1rem;">
+            <a href="javascript:void(0)" id="langEn" style="text-decoration: none; color: inherit; font-weight: bold;">English</a>
+            <span> | </span>
+            <a href="javascript:void(0)" id="langZh" style="text-decoration: none; color: inherit;">中文</a>
+          </div>
           <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#29abe0', 'Q5Q3QEHRA');kofiwidget2.draw();</script> 
         </div>
       </div>
@@ -85,42 +90,42 @@
     <div id="challengeModal" class="modal"></div>
 
     <div id="errorDialog" class="modal dialog">
-      <h2><span class="material-symbols-outlined icon">&#xe000;</span> Error</h2>
+      <h2><span class="material-symbols-outlined icon">&#xe000;</span> <span data-i18n="error">Error</span></h2>
       <div id="errorDialogBody" class="body"></div>
-      <button id="errorDialogOk" class="button">OK</button>
+      <button id="errorDialogOk" class="button" data-i18n="ok">OK</button>
     </div>
 
     <div id="splitsDialog" class="modal dialog">
-      <h2><span class="material-symbols-outlined icon">&#xf090;</span> Split APKs</h2>
-      <div style="margin-bottom: 12px;">
+      <h2><span class="material-symbols-outlined icon">&#xf090;</span> <span data-i18n="split_apks">Split APKs</span></h2>
+      <div style="margin-bottom: 12px;" data-i18n="splits_warning">
         These are not meant to be installed individually!
         You must install them alongside the base APK (using adb or an XAPK file).
       </div>
       <div id="splitsDialogBody" class="body"></div>
-      <button id="splitsDialogDone" class="button">Done</button>
+      <button id="splitsDialogDone" class="button" data-i18n="done">Done</button>
     </div>
 
     <div id="xapkDialog" class="modal dialog">
-      <h2><span class="material-symbols-outlined icon">&#xf090;</span> XAPK Helper</h2>
+      <h2><span class="material-symbols-outlined icon">&#xf090;</span> <span data-i18n="xapk_helper">XAPK Helper</span></h2>
       <div id="xapkDialogBody" class="body">
         <div class="section">
-          1. Download the base APK and select it in the input box below.
+          <span data-i18n="xapk_step1">1. Download the base APK and select it in the input box below.</span>
           <a id="xapkDialogBaseDl" class="button secondary" target="_blank">
             <span class="material-symbols-outlined">&#xf090;</span>
-            <span>Base APK</span>
+            <span data-i18n="base_apk">Base APK</span>
           </a>
           <input id="baseApkInput" type="file" accept=".apk" class="file-input">
         </div>
         <div class="section">
-          2. Download one or more of the split APKs and select them in the input box below.
+          <span data-i18n="xapk_step2">2. Download one or more of the split APKs and select them in the input box below.</span>
           <div id="xapkDialogSplits"></div>
           <input id="splitApksInput" type="file" multiple accept=".apk" class="file-input">
         </div>
-        Once you're done, press the Create button below to get your XAPK file.
+        <div data-i18n="xapk_step3">Once you're done, press the Create button below to get your XAPK file.</div>
       </div>
       <div class="buttons">
-        <button id="xapkDialogCreate" class="button">Create</button>
-        <button id="xapkDialogClose" class="button">Close</button>
+        <button id="xapkDialogCreate" class="button" data-i18n="create">Create</button>
+        <button id="xapkDialogClose" class="button" data-i18n="close">Close</button>
       </div>
     </div>
 

@@ -2,6 +2,23 @@ import { TurnstileObject } from "turnstile-types";
 import { Zip, AsyncZipDeflate } from "fflate";
 import streamSaver from "streamsaver";
 import { md5 } from "hash-wasm";
+import { t, setCurrentLang } from "./i18n";
+
+function updateLanguage(lang: string) {
+    setCurrentLang(lang);
+    localStorage.setItem("lang", lang); 
+    
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (key) {
+            (el as HTMLElement).innerText = t(key);
+        }
+    });
+
+    if (mainInput) mainInput.placeholder = t("input_placeholder");
+
+    if (app) showAppDetails();
+}
 
 var mainInputWrapper = document.getElementById("mainInputWrapper") as HTMLDivElement;
 var mainInput = document.getElementById("mainInput") as HTMLInputElement;
@@ -107,18 +124,18 @@ function showAppDetails() {
             splitsButton.style.removeProperty("display");
             xapkButton.style.removeProperty("display");
             downloadButton.classList.add("secondary");
-            downloadBtnLabel.innerText = "Base APK";
+            downloadBtnLabel.innerText = t("base_apk_label");
         }
         else {
             splitsButton.style.display = "none";
             xapkButton.style.display = "none";
             downloadButton.classList.remove("secondary");
-            downloadBtnLabel.innerText = "Download (" + app.apk.file_size + ")";
+            downloadBtnLabel.innerText = t("download_size", { size: app.apk.file_size || "" });
         }
     }
     else {
-        appVersion.innerText = "N/A";
-        appUpdatedAt.innerText = "N/A";
+        appVersion.innerText = t("na");
+        appUpdatedAt.innerText = t("na");
         downloadBox.classList.add("na");
         splitsButton.style.display = "none";
         xapkButton.style.display = "none";
@@ -187,7 +204,7 @@ async function fetchWithTurnstile(input: RequestInfo | URL, init?: RequestInit):
                 'sitekey': "0x4AAAAAAAQb6Ny2xbzumyl2",
                 'error-callback': function (code) {
                     hideModal(challengeModal);
-                    reject(new Error("Turnstile challenge failed with error code " + code));
+                    reject(new Error(t("turnstile_error", { code: code })));
                 },
                 'callback': function () {
                     hideModal(challengeModal);
@@ -298,15 +315,15 @@ async function readAsUint8Array(blob: Blob) {
 function createXapk() {
     return new Promise<void>(async (resolve, reject) => {
         if (!app || !app.package_id || !app.apk.version_code || !app.split_apks || !app.apk.base_apk_md5) {
-            return reject(new Error("Cannot create XAPK for this app."));
+            return reject(new Error(t("xapk_error")));
         }
 
         var baseApkFile = baseApkInput.files?.item(0);
-        if (!baseApkFile) return reject(new Error("Base APK file not selected."));
+        if (!baseApkFile) return reject(new Error(t("base_apk_missing")));
 
         var splitApkFiles = splitApksInput.files;
         if (!splitApkFiles || !splitApkFiles.length) {
-            return reject(new Error("No split APK files selected."));
+            return reject(new Error(t("split_apk_missing")));
         }
 
         var xapkFilename = app.package_id + "-" + app.apk.version_code + ".xapk";
@@ -338,7 +355,7 @@ function createXapk() {
             var data = await readAsUint8Array(baseApkFile);
             if (await md5(data) != app.apk.base_apk_md5) {
                 xapkWriter.abort();
-                return reject(new Error("Base APK checksum mismatch (incorrect or corrupted file)."));
+                return reject(new Error(t("checksum_mismatch")));
             }
             addFile(app.package_id + ".apk", data);
         }
@@ -356,13 +373,13 @@ function createXapk() {
 
             if (!foundSplit) {
                 xapkWriter.abort();
-                return reject(new Error("Failed to identify split APK: " + file.name + " (incorrect or corrupted file)."));
+                return reject(new Error(t("split_identify_fail", { name: file.name })));
             }
 
             var name = getSplitApkName(foundSplit) + ".apk";
             if (files.has(name)) {
                 xapkWriter.abort();
-                return reject(new Error("Duplicate split APK files were selected."));
+                return reject(new Error(t("duplicate_split")));
             }
 
             addFile(name, data);
@@ -375,7 +392,7 @@ function createXapk() {
 xapkDialogCreate.addEventListener("click", async () => {
     xapkDialogCreate.disabled = true;
     xapkDialogClose.style.display = "none";
-    xapkDialogCreate.innerText = "Please wait...";
+    xapkDialogCreate.innerText = t("please_wait");
 
     try {
         await createXapk();
@@ -386,7 +403,7 @@ xapkDialogCreate.addEventListener("click", async () => {
 
     xapkDialogCreate.disabled = false;
     xapkDialogClose.style.removeProperty("display");
-    xapkDialogCreate.innerText = "Create";
+    xapkDialogCreate.innerText = t("create");
 });
 
 async function fetchApp(linkOrId: string): Promise<App> {
@@ -397,11 +414,11 @@ async function fetchApp(linkOrId: string): Promise<App> {
             url = new URL(linkOrId);
         }
         catch {
-            throw new Error("Invalid URL.");
+            throw new Error(t("invalid_url"));
         }
 
         if (url.host != "m-apps.qoo-app.com" && url.host != "apps.qoo-app.com") {
-            throw new Error("Invalid app link.");
+            throw new Error(t("invalid_app_link"));
         }
         
         var split = url.pathname.split("/").reverse();
@@ -413,11 +430,11 @@ async function fetchApp(linkOrId: string): Promise<App> {
             }
         }
         if (idString == null || isNaN(id = +idString) || !Number.isInteger(id)) {
-            throw new Error("Invalid app link.");
+            throw new Error(t("invalid_app_link"));
         }
     }
     else if (!Number.isInteger(id)) {
-        throw new Error("Invalid app ID.");
+        throw new Error(t("invalid_app_id"));
     }
 
     var res = await fetchWithTurnstile("/api/v2/app", {
@@ -442,6 +459,17 @@ declare global {
 
 var app: App | undefined;
 window.init = function() {
+    const savedLang = localStorage.getItem("lang");
+    if (savedLang) {
+        updateLanguage(savedLang);
+    } else {
+        const browserLang = navigator.language.startsWith("zh") ? "zh" : "en";
+        updateLanguage(browserLang);
+    }
+    
+    document.getElementById("langEn")?.addEventListener("click", () => updateLanguage("en"));
+    document.getElementById("langZh")?.addEventListener("click", () => updateLanguage("zh"));
+
     var working = false;
     submitButton.addEventListener("click", async () => {
         if (working) return;
@@ -449,7 +477,7 @@ window.init = function() {
 
         var value = mainInput.value;
         if (!value) {
-            showErrorDialog("Input cannot be empty.");
+            showErrorDialog(t("input_empty"));
             working = false;
             return;
         }
