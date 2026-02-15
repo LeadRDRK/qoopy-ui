@@ -469,6 +469,7 @@ window.init = function() {
     
     document.getElementById("langEn")?.addEventListener("click", () => updateLanguage("en"));
     document.getElementById("langZh")?.addEventListener("click", () => updateLanguage("zh"));
+    document.getElementById("langFil")?.addEventListener("click", () => updateLanguage("fil"));
 
     var working = false;
     submitButton.addEventListener("click", async () => {
