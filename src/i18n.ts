@@ -1,9 +1,11 @@
 import en from './locales/en.json';
 import zh from './locales/zh.json';
+import fil from './locales/fil.json';
 
 export const translations: Record<string, any> = {
     en,
-    zh
+    zh,
+    fil,
 };
 
 export type Language = keyof typeof translations;
